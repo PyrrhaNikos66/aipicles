@@ -1,0 +1,526 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2026增港澳AI竞赛培训 · 第一次课</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --ink: #17233f; --ink-soft: #46577a; --blue: #2b6cf6; --purple: #7b5cf0;
+    --green: #17b978; --orange: #ff8a3d; --pink: #ff5d8f; --yellow: #ffe066;
+  }
+  html, body { height: 100%; }
+  body {
+    font-family: "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+    color: var(--ink);
+    background: linear-gradient(135deg, #eef3ff 0%, #f7f0ff 45%, #eafaf4 100%);
+    overflow: hidden;
+  }
+  .deck { position: relative; width: 100%; height: 100vh; }
+  .slide { position: absolute; inset: 0; display: none; overflow-y: auto; }
+  .slide.active { display: block; }
+  .slide-inner {
+    max-width: 1120px; margin: 0 auto; min-height: 100%;
+    padding: 5vh 4vw 15vh; display: flex; flex-direction: column;
+    justify-content: center; animation: rise .45s cubic-bezier(.2,.8,.3,1);
+  }
+  .slide-inner.center { align-items: center; text-align: center; }
+  @keyframes rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+  .kicker {
+    display: inline-block; font-size: clamp(13px,1.35vw,17px); font-weight: 800;
+    letter-spacing: .08em; color: var(--blue); background: #e8f0ff;
+    border-radius: 999px; padding: 5px 16px; margin-bottom: 14px;
+  }
+  h1.cover-title {
+    font-size: clamp(30px,5vw,62px); line-height: 1.18; letter-spacing: -.5px;
+    background: linear-gradient(100deg,#2b6cf6,#7b5cf0 55%,#ff5d8f);
+    -webkit-background-clip: text; background-clip: text; color: transparent; margin-bottom: 14px;
+  }
+  h2.slide-title { font-size: clamp(25px,3.4vw,42px); line-height: 1.25; margin-bottom: 6px; }
+  .subtitle { font-size: clamp(15px,1.7vw,21px); color: var(--ink-soft); margin-bottom: 22px; line-height: 1.6; }
+  p, li { font-size: clamp(16px,1.85vw,24px); line-height: 1.75; }
+  .key { background: linear-gradient(180deg,transparent 52%,var(--yellow) 52%); font-weight: 800; padding: 0 4px; border-radius: 3px; color: #10203d; }
+  .note-tip {
+    display: inline-flex; align-items: center; gap: 8px; background: #fff6da;
+    border: 2px dashed #ffbe0b; color: #96660a; font-size: clamp(13px,1.4vw,17px);
+    font-weight: 800; padding: 7px 18px; border-radius: 999px; margin-bottom: 18px; width: fit-content;
+  }
+  .cards { display: grid; gap: 14px; }
+  .cards.c2 { grid-template-columns: repeat(2,1fr); }
+  .cards.c3 { grid-template-columns: repeat(3,1fr); }
+  .cards.c4 { grid-template-columns: repeat(4,1fr); }
+  .cards.c5 { grid-template-columns: repeat(5,1fr); }
+  .card {
+    background: #fff; border-radius: 20px; padding: 18px 20px; border-top: 6px solid var(--blue);
+    box-shadow: 0 10px 26px rgba(23,35,63,.09); font-size: clamp(15px,1.7vw,21px); line-height: 1.65;
+  }
+  .card h3 { font-size: clamp(16px,1.9vw,23px); margin-bottom: 8px; color: var(--blue); }
+  .c-blue { border-top-color: var(--blue); } .c-blue h3 { color: var(--blue); }
+  .c-purple { border-top-color: var(--purple); } .c-purple h3 { color: var(--purple); }
+  .c-green { border-top-color: var(--green); } .c-green h3 { color: var(--green); }
+  .c-orange { border-top-color: var(--orange); } .c-orange h3 { color: var(--orange); }
+  .c-pink { border-top-color: var(--pink); } .c-pink h3 { color: var(--pink); }
+  .c-yellow { border-top-color: #ffc107; } .c-yellow h3 { color: #b8860b; }
+  ul.dot { list-style: none; }
+  ul.dot li { position: relative; padding-left: 34px; margin: 12px 0; }
+  ul.dot li::before {
+    content: ""; position: absolute; left: 8px; top: .62em; width: 11px; height: 11px;
+    border-radius: 50%; background: linear-gradient(135deg,var(--blue),var(--purple));
+  }
+  ol.num { list-style: none; counter-reset: n; }
+  ol.num li { counter-increment: n; position: relative; padding-left: 48px; margin: 14px 0; }
+  ol.num li::before {
+    content: counter(n); position: absolute; left: 0; top: .12em; width: 32px; height: 32px;
+    border-radius: 50%; background: var(--blue); color: #fff; font-weight: 800;
+    font-size: 17px; display: grid; place-items: center;
+  }
+  .vs { display: grid; grid-template-columns: 1fr auto 1fr; gap: 16px; align-items: stretch; }
+  .vs-box {
+    background: #fff; border-radius: 20px; padding: 18px 20px;
+    box-shadow: 0 10px 26px rgba(23,35,63,.08); font-size: clamp(15px,1.7vw,21px); line-height: 1.7;
+  }
+  .vs-box.bad { border: 3px solid #ffd0d0; background: #fff6f6; }
+  .vs-box.good { border: 3px solid #b6f0d4; background: #f3fffa; }
+  .vs-label { font-weight: 800; font-size: clamp(14px,1.5vw,18px); margin-bottom: 8px; display: block; }
+  .vs-box.bad .vs-label { color: #e04848; } .vs-box.good .vs-label { color: #0f9b63; }
+  .vs-arrow { display: grid; place-items: center; font-size: clamp(24px,3vw,40px); color: var(--blue); font-weight: 800; }
+  .banner {
+    background: linear-gradient(100deg,#2b6cf6,#7b5cf0); color: #fff; border-radius: 20px;
+    padding: 20px 26px; font-size: clamp(17px,2.1vw,27px); font-weight: 800; line-height: 1.6;
+    box-shadow: 0 14px 30px rgba(43,108,246,.28); margin: 18px 0;
+  }
+  .banner .key { background: linear-gradient(180deg,transparent 52%,rgba(255,255,255,.45) 52%); color: #fff; }
+  .tip-box {
+    background: #fffdf3; border: 2px solid #ffe08a; border-left: 8px solid #ffbe0b;
+    border-radius: 14px; padding: 16px 20px; font-size: clamp(15px,1.7vw,21px);
+    line-height: 1.7; margin-top: 16px;
+  }
+  .fill-row { display: flex; align-items: flex-end; gap: 10px; margin: 11px 0; font-size: clamp(15px,1.7vw,20px); }
+  .fill-label { font-weight: 800; white-space: nowrap; color: #2b3a5c; }
+  .fill-line { flex: 1; border-bottom: 2px dashed #b9c6e0; height: 1.5em; }
+  .timeline { display: grid; gap: 12px; }
+  .tl-row {
+    display: grid; grid-template-columns: 130px 1fr; gap: 16px; align-items: center;
+    background: #fff; border-radius: 16px; padding: 13px 18px;
+    box-shadow: 0 6px 18px rgba(23,35,63,.07); font-size: clamp(15px,1.7vw,20px);
+  }
+  .tl-time {
+    font-weight: 800; color: #fff; background: var(--blue); border-radius: 10px;
+    padding: 5px 10px; text-align: center; font-size: clamp(13px,1.5vw,17px);
+  }
+  .cover-badge {
+    font-size: clamp(50px,9vw,110px); font-weight: 900; letter-spacing: .04em;
+    background: linear-gradient(100deg,#2b6cf6,#ff5d8f); -webkit-background-clip: text;
+    background-clip: text; color: transparent; line-height: 1; margin-bottom: 6px;
+  }
+  .cover-sub { font-size: clamp(17px,2.2vw,28px); color: var(--ink-soft); font-weight: 700; margin-bottom: 26px; }
+  .cover-tags { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin-bottom: 26px; }
+  .cover-tags span {
+    background: #fff; border-radius: 999px; padding: 10px 22px;
+    font-size: clamp(14px,1.6vw,20px); font-weight: 700; box-shadow: 0 8px 20px rgba(23,35,63,.1);
+  }
+  .cover-foot { font-size: clamp(14px,1.6vw,19px); color: #7b89a8; letter-spacing: .06em; }
+  .nav {
+    position: fixed; left: 0; right: 0; bottom: 0; display: flex; align-items: center;
+    justify-content: space-between; gap: 14px; padding: 11px 20px;
+    background: rgba(255,255,255,.86); backdrop-filter: blur(12px);
+    border-top: 1px solid rgba(23,35,63,.09); z-index: 100;
+  }
+  .nav-btn {
+    border: none; cursor: pointer; font-family: inherit; font-weight: 800;
+    font-size: clamp(14px,1.5vw,17px); color: #fff;
+    background: linear-gradient(135deg,#2b6cf6,#7b5cf0);
+    padding: 10px 22px; border-radius: 999px; box-shadow: 0 6px 16px rgba(43,108,246,.32);
+    transition: transform .15s, opacity .15s;
+  }
+  .nav-btn:active { transform: scale(.95); }
+  .nav-btn:disabled { opacity: .32; cursor: not-allowed; box-shadow: none; }
+  .nav-btn.ghost { background: #eef3ff; color: var(--blue); box-shadow: none; padding: 10px 16px; }
+  .counter { font-weight: 800; font-size: clamp(14px,1.6vw,18px); color: var(--ink-soft); letter-spacing: .06em; white-space: nowrap; }
+  .nav-right { display: flex; gap: 10px; align-items: center; }
+  .progress { position: fixed; top: 0; left: 0; right: 0; height: 6px; background: rgba(43,108,246,.12); z-index: 101; }
+  .progress-bar { height: 100%; width: 0; background: linear-gradient(90deg,#2b6cf6,#7b5cf0,#ff5d8f); transition: width .3s ease; border-radius: 0 6px 6px 0; }
+  @media (max-width: 820px) {
+    .cards.c3,.cards.c4,.cards.c5 { grid-template-columns: repeat(2,1fr); }
+    .vs { grid-template-columns: 1fr; } .vs-arrow { transform: rotate(90deg); }
+    .slide-inner { padding: 4vh 5vw 18vh; } .tl-row { grid-template-columns: 100px 1fr; }
+  }
+  @media (max-width: 520px) {
+    .cards.c2,.cards.c3,.cards.c4,.cards.c5 { grid-template-columns: 1fr; }
+    .nav-btn { padding: 9px 14px; }
+  }
+</style>
+</head>
+<body>
+<div class="progress"><div class="progress-bar" id="progressBar"></div></div>
+<div class="deck" id="deck">
+
+  <!-- 1 封面 -->
+  <section class="slide active">
+    <div class="slide-inner center">
+      <div class="cover-badge">第一次课</div>
+      <h1 class="cover-title">增港澳AI创新应用竞赛</h1>
+      <p class="cover-sub">小学生培训 · 规则与提示词基础</p>
+      <div class="cover-tags"><span>📋 规则</span><span>📊 评分</span><span>✍️ 提示词</span></div>
+      <p class="cover-foot">2小时 · 懂规则 · 会评分 · 会写提示词</p>
+    </div>
+  </section>
+
+  <!-- 2 今天完成什么 -->
+  <section class="slide">
+    <div class="slide-inner">
+      <span class="kicker">第 1 站</span>
+      <h2 class="slide-title">今天我们要完成什么？</h2>
+      <p class="subtitle">第一次课，我们先把地基打好。</p>
+      <div class="note-tip">📝 这一页要抄进笔记本</div>
+      <ul class="dot">
+        <li>认识比赛的<span class="key">规则、流程和评分标准</span></li>
+        <li>学会用 <span class="key">四把尺</span> 评价作品</li>
+        <li>学会写 <span class="key">AI 提示词</span>（五要素+优化三步法）</li>
+        <li>抽随机主题，写<span class="key">初版提示词</span></li>
+        <li>练 <span class="key">1 分钟口头表达</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 3 破冰打分 -->
+  <section class="slide">
+    <div class="slide-inner">
+      <span class="kicker">破冰游戏 · 5分钟</span>
+      <h2 class="slide-title">同一主题，三个 AI 作品，你来打分！</h2>
+      <p class="subtitle">主题：<span class="key">“会说话的垃圾桶”</span>。看看 A、B、C 三个作品，你觉得哪个最好？为什么？</p>
+      <div class="cards c3">
+        <div class="card c-blue"><h3>作品 A</h3><p>见图A</p><p style="font-size:.85em;color:#46577a;margin-top:8px">简单、只有垃圾桶、没有场景</p></div>
+        <div class="card c-purple"><h3>作品 B</h3><p>见图B</p><p style="font-size:.85em;color:#46577a;margin-top:8px">校园场景、有屏幕、有同学</p></div>
+        <div class="card c-pink"><h3>作品 C</h3><p>见图C</p><p style="font-size:.85em;color:#46577a;margin-top:8px">太空场景、会发光、有创意</p></div>
+      </div>
+      <div class="tip-box">
+        🗳️ <b>打分规则：</b>每人给 A、B、C 各打 1—5 分。<br>
+        想一想：<span class="key">哪个最清楚？哪个最有创意？哪个最实用？</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 比赛是什么 -->
+  <section class="slide">
+    <div class="slide-inner">
+      <span class="kicker">规则篇</span>
+      <h2 class="slide-title">比赛是什么？</h2>
+      <div class="note-tip">📝 记住项目、方式和时间</div>
+      <div class="cards c2">
+        <div class="card c-blue"><h3>项目设置</h3><p>① 图像创作<br>② 网页创作</p></div>
+        <div class="card c-purple"><h3>参赛方式</h3><p>现场上机竞赛<br>+ 现场展示与答辩</p></div>
+        <div class="card c-green"><h3>时间安排</h3><p>上机竞赛：<span class="key">1 小时</span><br>展示答辩：<span class="key">3 分钟</span></p></div>
+        <div class="card c-orange"><h3>组别</h3><p>图像创作：<span class="key">小学组</span><br>网页创作：初中组</p></div>
+      </div>
+      <div class="tip-box">👥 可跨年级参赛，可组团参赛。<span class="key">单一作品作者不超过 3 人。</span></div>
+    </div>
+  </section>
+
+  <!-- 5 现场流程与展示要求 -->
+  <section class="slide">
+    <div class="slide-inner">
+      <span class="kicker">规则篇</span>
+      <h2 class="slide-title">现场流程与展示要求</h2>
+      <div class="cards c2" style="margin-bottom:18px">
+        <div class="card c-blue"><h3>上机竞赛</h3><p><span class="key">1 小时</span>，现场完成作品</p></div>
+        <div class="card c-purple"><h3>展示答辩</h3><p><span class="key">3 分钟</span>，站在台前讲给大家听</p></div>
+      </div>
+      <div class="note-tip">📝 展示时必须讲这三件事</div>
+      <ol class="num">
+        <li>阐述<span class="key">创意构思</span></li>
+        <li>说明<span class="key">提示词的设计思路和优化过程</span></li>
+        <li>演示 <span class="key">AI 应用助手的基本功能和交互效果</span></li>
+      </ol>
+      <div class="tip-box" style="margin-top:10px">⚠️ 作品必须<span class="key">现场完成、原创</span>；严禁套用他人提示词、模板或作品。</div>
+    </div>
+  </section>
+
+  <!-- 6 四把尺 -->
+  <section class="slide">
+    <div class="slide-inner">
+      <span class="kicker">评分篇</span>
+      <h2 class="slide-title">好作品“四把尺”（总分 100 分）</h2>
+      <p class="subtitle">评委用四把尺子量你的作品，每把 25 分。</p>
+      <div class="cards c4">
+        <div class="card c-blue"><h3>相关性</h3><p>25 分<br>有没有跑题</p></div>
+        <div class="card c-purple"><h3>创新性</h3><p>25 分<br>有没有新点子</p></div>
+        <div class="card c-green"><h3>实用性</h3><p>25 分<br>能帮到谁</p></div>
+        <div class="card c-orange"><h3>准确度</h3><p>25 分<br>对不对、顺不顺</p></div>
+      </div>
+      <div class="banner">分数一样时 → <span class="key">创新性得分高的人获胜</span></div>
+    </div>
+  </section>
+
+  <!-- 7 相关性 -->
+  <section class="slide">
+    <div class="slide-inner">
+      <span class="kicker">评分篇 · 25分</span>
+      <h2 class="slide-title">第一把尺：相关性</h2>
+      <ul class="dot">
+        <li>紧扣竞赛主题，内容与主题<span class="key">高度契合</span></li>
+        <li>标题<span class="key">简洁明了，准确反映应用功能</span></li>
+      </ul>
+      <div class="cards c3" style="margin-top:18px">
+        <div class="card c-orange"><h3>一般 ⭐</h3><p>《垃圾桶》</p></div>
+        <div class="card c-yellow"><h3>较好 ⭐⭐</h3><p>《会说话的垃圾桶》</p></div>
+        <div class="card c-green"><h3>更好 ⭐⭐⭐</h3><p>《校园AI分类助手——小绿》</p></div>
+      </div>
+      <div class="tip-box">🤔 你觉得哪一个最能看出“功能”？为什么？</div>
+    </div>
+  </section>
+
+  <!-- 8 创新性 -->
+  <section class="slide">
+    <div class="slide-inner">
+      <span class="kicker">评分篇 · 25分</span>
+      <h2 class="slide-title">第二把尺：创新性</h2>
+      <ul class="dot">
+        <li>内容<span class="key">新颖独特</span>，有想象力和创造力</li>
+        <li>设计思路<span class="key">富有创意，展现个性化思考</span></li>
+      </ul>
+      <div class="vs" style="margin-top:20px">
+        <div class="vs-box bad"><span class="vs-label">普通想法</span>画一个垃圾桶，能装垃圾。</div>
+        <div class="vs-arrow">➜</div>
+        <div class="vs-box good"><span class="vs-label">创新想法</span>设计一个会说话、会亮灯、答对分类就<b>奖励小贴纸</b>的垃圾桶“小绿”。</div>
+      </div>
+      <div class="banner">同分时，<span class="key">创新性最重要</span>！多想一步，就赢一步。</div>
+    </div>
+  </section>
+
+  <!-- 9 实用性 -->
+  <section class="slide">
+    <div class="slide-inner">
+      <span class="kicker">评分篇 · 25分</span>
+      <h2 class="slide-title">第三把尺：实用性</h2>
+      <ul class="dot">
+        <li>能够<span class="key">解决实际问题</span>，或在特定场景中发挥作用</li>
+        <li>应用场景具有一定的<span class="key">普遍性和适用性</span></li>
+      </ul>
+      <div class="tip-box" style="margin-top:22px">
+        🌱 <b>示例：</b>把“小绿”放在校园操场旁，帮助同学把纸盒投进可回收桶。<br>
+        👉 它解决的问题是：<span class="key">同学不会分类、乱扔垃圾</span>。
+      </div>
+      <div class="tip-box">
+        🧠 问自己三个问题：<br>① 我的作品给<b>谁</b>用？ ② 在<b>哪里</b>用？ ③ 解决了<b>什么麻烦</b>？
+      </div>
+    </div>
+  </section>
+
+  <!-- 10 准确度 -->
+  <section class="slide">
+    <div class="slide-inner">
+      <span class="kicker">评分篇 · 25分</span>
+      <h2 class="slide-title">第四把尺：准确度</h2>
+      <ul class="dot">
+        <li>输出结果<span class="key">准确可靠，无明显错误信息</span></li>
+        <li><span class="key">响应及时，交互体验流畅自然</span></li>
+      </ul>
+      <div class="vs" style="margin-top:20px">
+        <div class="vs-box good"><span class="vs-label">✔ 正确</span>纸盒 → 屏幕显示“纸盒是可回收物” → 亮起<b>蓝色</b>灯</div>
+        <div class="vs-arrow">✘</div>
+        <div class="vs-box bad"><span class="vs-label">✘ 错误</span>把<b>有害垃圾</b>说成“可回收物”</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 11 什么是AI图像创作 -->
+  <section class="slide">
+    <div class="slide-inner">
+      <span class="kicker">技能篇 · 提示词</span>
+      <h2 class="slide-title">什么是 AI 图像创作？</h2>
+      <ul class="dot">
+        <li>用<span class="key">文字描述画面</span>，让 AI 生成图像</li>
+        <li>不断<span class="key">修改提示词</span>，让图越来越接近想法</li>
+      </ul>
+      <div class="cards c3" style="margin-top:20px">
+        <div class="card c-blue"><h3>关键词</h3><p>主体 · 场景 · 风格</p></div>
+        <div class="card c-purple"><h3>再加</h3><p>颜色 · 构图 · 细节</p></div>
+        <div class="card c-green"><h3>不断改</h3><p>看结果 → 改一改 → 再生成</p></div>
+      </div>
+      <div class="tip-box">
+        🐱 试试看：<br>❌「一只猫」 → 太普通，AI 只能随便猜<br>
+        ✅「一只戴宇航员头盔的橘猫，在月球上，卡通风格」 → 画面马上就出来了
+      </div>
+    </div>
+  </section>
+
+  <!-- 12 提示词五要素 -->
+  <section class="slide">
+    <div class="slide-inner">
+      <span class="kicker">技能篇 · 提示词</span>
+      <h2 class="slide-title">提示词魔法五要素 ✨</h2>
+      <div class="note-tip">📝 口诀一定要背下来</div>
+      <div class="cards c5">
+        <div class="card c-blue"><h3>主体</h3><p>谁？什么？</p></div>
+        <div class="card c-purple"><h3>场景</h3><p>在哪里？</p></div>
+        <div class="card c-green"><h3>风格</h3><p>卡通 / 写实 / 水彩</p></div>
+        <div class="card c-orange"><h3>细节</h3><p>颜色 表情 动作</p></div>
+        <div class="card c-pink"><h3>构图</h3><p>居中 远景 特写</p></div>
+      </div>
+      <div class="banner"><span class="key">主体 + 场景 + 风格 + 细节 + 构图</span></div>
+    </div>
+  </section>
+
+  <!-- 13 普通VS好 -->
+  <section class="slide">
+    <div class="slide-inner">
+      <span class="kicker">技能篇 · 提示词</span>
+      <h2 class="slide-title">普通提示词 VS 好提示词</h2>
+      <div class="vs">
+        <div class="vs-box bad"><span class="vs-label">❌ 普通</span>一个会说话的垃圾桶</div>
+        <div class="vs-arrow">➜</div>
+        <div class="vs-box good"><span class="vs-label">✅ 好</span>一个可爱的<b>蓝色智能垃圾桶</b>，站在<b>校园操场旁</b>，胸口屏幕显示“纸盒是可回收物”，<b>卡通3D风格</b>，<b>明亮颜色</b>，<b>居中构图</b>，同学们围着它</div>
+      </div>
+      <div class="tip-box">🤔 找一找：好的提示词里，多了哪些关键词？分别属于五要素里的哪一个？</div>
+    </div>
+  </section>
+
+  <!-- 14 优化三步法 -->
+  <section class="slide">
+    <div class="slide-inner">
+      <span class="kicker">技能篇 · 提示词</span>
+      <h2 class="slide-title">提示词优化三步法</h2>
+      <div class="banner">简单写 ➜ 看结果 ➜ 改一改 ➜ 再生成</div>
+      <div class="cards c3" style="margin-top:20px">
+        <div class="card c-blue"><h3>第一步</h3><p>先写简单版</p></div>
+        <div class="card c-orange"><h3>第二步</h3><p>看结果，找问题</p></div>
+        <div class="card c-green"><h3>第三步</h3><p>加关键词，再生成</p></div>
+      </div>
+      <div class="tip-box">
+        <b>示例：</b><br>初版：<code>防溺水</code> —— 太简单，没有画面<br>
+        优化：<span class="key">一个卡通安全卫士机器人，站在河边，举着“不要独自下水”的牌子，蓝白色，明亮，特写构图，背景有救生圈和警示牌</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 15 填空模板 -->
+  <section class="slide">
+    <div class="slide-inner">
+      <span class="kicker">技能篇 · 提示词</span>
+      <h2 class="slide-title">📝 提示词填空模板</h2>
+      <p class="subtitle">照着填，你也能写出好提示词。</p>
+      <div class="card c-blue" style="font-size:clamp(16px,1.9vw,23px);line-height:2.1;border-top-width:8px">
+        <p>一个 <span class="key">【主体：谁/什么】</span>，</p>
+        <p>在 <span class="key">【场景：在哪里】</span>，</p>
+        <p>正在 <span class="key">【动作：做什么】</span>，</p>
+        <p>风格是 <span class="key">【风格：卡通/写实/水彩】</span>，</p>
+        <p>颜色 <span class="key">【颜色：明亮/蓝白色/暖色】</span>，</p>
+        <p>构图 <span class="key">【构图：居中/特写/远景】</span>，</p>
+        <p>还要有 <span class="key">【细节：表情/道具/背景】</span>。</p>
+      </div>
+      <div class="tip-box">✍️ 小练习：用这个模板，给你抽到的主题写一句提示词。</div>
+    </div>
+  </section>
+
+  <!-- 16 贯穿示例 小绿 -->
+  <section class="slide">
+    <div class="slide-inner">
+      <span class="kicker">贯穿示例</span>
+      <h2 class="slide-title">🌿 会说话的垃圾桶“小绿”</h2>
+      <div class="cards c3" style="margin-bottom:16px">
+        <div class="card c-green"><h3>主题</h3><p>校园垃圾分类</p></div>
+        <div class="card c-blue"><h3>创意</h3><p>会说话、会亮灯、会奖励贴纸</p></div>
+        <div class="card c-purple"><h3>标题</h3><p>《校园AI分类助手——小绿》</p></div>
+      </div>
+      <div class="vs">
+        <div class="vs-box bad"><span class="vs-label">初版提示词</span>一个会说话的垃圾桶</div>
+        <div class="vs-arrow">➜</div>
+        <div class="vs-box good"><span class="vs-label">优化提示词</span>一个可爱的蓝色智能垃圾桶，站在校园操场旁，胸口屏幕显示“纸盒是可回收物”，卡通3D风格，明亮颜色，居中构图，同学们围着它</div>
+      </div>
+      <div class="tip-box">🎤 <b>展示时这样说：</b>这幅图像展示了小绿在校园里帮助同学分类垃圾的场景。我通过提示词优化，让小绿有了屏幕提示、明亮的颜色和校园背景。</div>
+    </div>
+  </section>
+
+  <!-- 17 随机主题抽签+写初版提示词 -->
+  <section class="slide">
+    <div class="slide-inner">
+      <span class="kicker">实操篇 · 20分钟</span>
+      <h2 class="slide-title">🎲 抽主题，写初版提示词</h2>
+      <div class="note-tip">📝 抽到不能换，但可以换角度</div>
+      <ul class="dot">
+        <li>每人或每组抽 <span class="key">1 个主题</span></li>
+        <li>用刚才的填空模板，写一句<span class="key">初版提示词</span></li>
+        <li>写完后，同桌互相读一读，看看能不能想象出画面</li>
+      </ul>
+      <div class="tip-box">
+        🎰 参考主题：会说话的垃圾桶、防溺水安全卫士、图书馆智能找书助手、交通安全小助手、保护海洋的超级英雄、传统节日新过法……
+      </div>
+    </div>
+  </section>
+
+  <!-- 18 1分钟表达+课后任务 -->
+  <section class="slide">
+    <div class="slide-inner">
+      <span class="kicker">收尾</span>
+      <h2 class="slide-title">1 分钟表达 & 课后任务</h2>
+      <div class="note-tip">📝 三项作业，下次带来</div>
+      <ol class="num">
+        <li>准备 <span class="key">2 个创意主题</span></li>
+        <li>写 <span class="key">1 组初版提示词</span>（用五要素模板）</li>
+        <li>练 <span class="key">1 次 1 分钟介绍</span>：我的主题、给谁用、解决什么问题</li>
+      </ol>
+      <div class="banner" style="margin-top:26px">下次课我们正式动手做作品，还要模拟上台展示！</div>
+      <p class="subtitle" style="text-align:center;margin-top:20px">🙋 现在，有什么问题都可以问老师～</p>
+    </div>
+  </section>
+
+</div>
+
+<div class="nav">
+  <button class="nav-btn ghost" id="btnFirst">⏮</button>
+  <button class="nav-btn" id="btnPrev">← 上一页</button>
+  <span class="counter" id="counter">1 / 18</span>
+  <button class="nav-btn" id="btnNext">下一页 →</button>
+  <div class="nav-right"><button class="nav-btn ghost" id="btnFull">⛶</button></div>
+</div>
+
+<script>
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const counter = document.getElementById('counter');
+  const bar = document.getElementById('progressBar');
+  const btnPrev = document.getElementById('btnPrev');
+  const btnNext = document.getElementById('btnNext');
+  const btnFirst = document.getElementById('btnFirst');
+  const btnFull = document.getElementById('btnFull');
+  let idx = 0;
+  function show(i) {
+    idx = Math.max(0, Math.min(slides.length - 1, i));
+    slides.forEach((s,n) => s.classList.toggle('active', n === idx));
+    counter.textContent = (idx+1) + ' / ' + slides.length;
+    bar.style.width = ((idx+1)/slides.length*100) + '%';
+    slides[idx].scrollTop = 0;
+    btnPrev.disabled = idx === 0;
+    btnNext.disabled = idx === slides.length - 1;
+  }
+  btnPrev.onclick = () => show(idx-1);
+  btnNext.onclick = () => show(idx+1);
+  btnFirst.onclick = () => show(0);
+  btnFull.onclick = () => {
+    if (!document.fullscreenElement) document.documentElement.requestFullscreen().catch(()=>{});
+    else document.exitFullscreen();
+  };
+  document.addEventListener('keydown', e => {
+    if (['ArrowRight','ArrowDown','PageDown',' '].includes(e.key)) { e.preventDefault(); show(idx+1); }
+    else if (['ArrowLeft','ArrowUp','PageUp'].includes(e.key)) { e.preventDefault(); show(idx-1); }
+    else if (e.key === 'Home') { e.preventDefault(); show(0); }
+    else if (e.key === 'End') { e.preventDefault(); show(slides.length-1); }
+    else if (e.key === 'f' || e.key === 'F') btnFull.click();
+  });
+  let touchX = 0, touchY = 0;
+  document.addEventListener('touchstart', e => { touchX = e.changedTouches[0].clientX; touchY = e.changedTouches[0].clientY; }, {passive:true});
+  document.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - touchX;
+    const dy = e.changedTouches[0].clientY - touchY;
+    if (Math.abs(dx) > 70 && Math.abs(dx) > Math.abs(dy)) dx < 0 ? show(idx+1) : show(idx-1);
+  }, {passive:true});
+  document.getElementById('deck').addEventListener('click', e => {
+    if (e.target.closest('.nav')) return;
+    if (window.getSelection().toString()) return;
+    show(idx+1);
+  });
+  show(0);
+</script>
+</body>
+</html>
